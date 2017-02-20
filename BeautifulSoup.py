@@ -49,4 +49,28 @@ for link in links:
 
 ==================
 
-letters = soup.find_all("div",class_ = "ec-statement")
+BeautifulSoup sample:
+
+letters = soup.find_all("div", class_="ec_statements")
+for element in letters:
+    lobbying[element.a.get_text()] = {}
+    
+    lobbying[element.a.get_text()]["link"] = element.a["href"]
+
+    date = element.find(id="legalert_date").get_text()
+    lobbying[element.a.get_text()]["date"] = date
+
+import os, csv
+with open("lobbying.csv", "w") as toWrite:
+    writer = csv.writer(toWrite, delimiter=",")
+    writer.writerow(["name", "link", "date"])
+    for a in lobbying.keys():
+        writer.writerow([a.encode("utf-8"), lobbying[a]["link"], lobbying[a]["date"]])
+
+import json
+
+with open("lobbying.json", "w") as writeJSON:
+    json.dump(lobbying, writeJSON)
+
+
+
